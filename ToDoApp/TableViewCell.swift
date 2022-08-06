@@ -22,6 +22,7 @@ class TableViewCell: UITableViewCell {
                              action: #selector(doneTapped),
                              for: .touchUpInside
         )
+        contentView.isUserInteractionEnabled = true
     }
 
     required init?(coder: NSCoder) {
@@ -40,6 +41,7 @@ class TableViewCell: UITableViewCell {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 33, weight: .regular, scale: .default)
         let largeBoldDoc = UIImage(systemName: "checkmark.circle.fill", withConfiguration: largeConfig)
         doneButton.setImage(largeBoldDoc, for: .normal)
+        print("OK")
     }
 }
 

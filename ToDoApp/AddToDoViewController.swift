@@ -5,6 +5,10 @@
 //  Created by Edgar Arakelyan on 21.07.22.
 //
 
+protocol AddToDoViewControllerDelegate: AnyObject {
+    func saveButtonTapped()
+}
+
 import UIKit
 
 struct ColorsData {
@@ -30,6 +34,7 @@ class AddToDoViewController: UIViewController {
     var colorView: ColorPickerView!
     var saveButton: UIButton!
     var colorStackView: UIStackView!
+    weak var delegate: MainViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,12 +42,20 @@ class AddToDoViewController: UIViewController {
         initViews()
         createColorViews(with: 0)
         
-//        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
-//
-//    @objc func saveButtonTapped() {
-//        saveData(data: )
-//    }
+
+    @objc func saveButtonTapped() {
+        ToDoItem.toDoItemsData.append(
+            ToDoItem(
+                isDone: false,
+                title: textField.text ?? "A",
+                priority: .red)
+        )
+        dismiss(animated: true)
+        delegate?.updateData()
+        print(ToDoItem.toDoItemsData)
+    }
     
     func saveData(data: ToDoItem) {
         textField.text = data.title
