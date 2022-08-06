@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol MainViewControllerDelegate: AnyObject {
+    func updateData()
+}
+
 struct ToDoItem {
     var isDone: Bool
     var title: String
@@ -16,19 +20,12 @@ struct ToDoItem {
         ToDoItem(isDone: true, title: "Todo that", priority: .systemBlue),
         ToDoItem(isDone: true, title: "Wow", priority: .green),
         ToDoItem(isDone: true, title: "sd that", priority: .yellow),
-        ToDoItem(isDone: true, title: "sdadasd", priority: .red),
-        ToDoItem(isDone: true, title: "dasd that", priority: .systemBlue),
-        ToDoItem(isDone: true, title: "Wow", priority: .green),
-        ToDoItem(isDone: true, title: "sd asdasdthat", priority: .yellow),
-        ToDoItem(isDone: true, title: "Todoaasdasdsdasdthat", priority: .red),
-        ToDoItem(isDone: true, title: "Todo that", priority: .systemBlue),
-        ToDoItem(isDone: true, title: "Wowasdasd", priority: .green),
-        ToDoItem(isDone: true, title: "sd tasdadhat", priority: .yellow),
-        ToDoItem(isDone: true, title: "Todoaasdadassdasdthat", priority: .red)
     ]
 }
 
 class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    
     var addButton: UIButton!
     var tableView: UITableView!
     var toDoItems = [String]()
@@ -46,7 +43,6 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         initTableView()
         addViews()
         addConstraints()
-        
         addButton.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
         
         if ToDoItem.toDoItemsData.isEmpty {
@@ -60,6 +56,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         tableView.backgroundColor = .white
         
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "TableViewCell")
@@ -67,11 +64,8 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc func addButtonTapped() {
         let viewController = AddToDoViewController()
+        viewController.delegate = self
         navigationController?.present(viewController, animated: true)
-    }
-    
-    func set(value: ToDoItem) {
-        
     }
 }
 
@@ -121,7 +115,7 @@ extension MainViewController {
             for: indexPath
         ) as! TableViewCell
         
-        cell.titleLabel.text = NSLocalizedString(data.title, comment: "")
+        cell.titleLabel.text = data.title
         return cell
     }
     
@@ -137,5 +131,11 @@ extension MainViewController {
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
+    }
+}
+
+extension MainViewController: MainViewControllerDelegate {
+    func updateData() {
+        tableView.reloadData()
     }
 }
