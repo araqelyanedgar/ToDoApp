@@ -20,7 +20,6 @@ struct ToDoItem {
         ToDoItem(isDone: true, title: "Todo that", priority: .systemBlue),
         ToDoItem(isDone: true, title: "Wow", priority: .green),
         ToDoItem(isDone: true, title: "sd that", priority: .yellow),
-        
     ]
 }
 
